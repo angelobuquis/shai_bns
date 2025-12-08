@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Admin Login</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <main style="max-width:380px;margin:8% auto;">
+    <section style="background:#fff;padding:30px;border-radius:12px;
+      box-shadow:0 10px 30px rgba(0,0,0,.08);border:1px solid var(--border)">
+      <h2 style="color:var(--primary);margin-bottom:20px;text-align:center;">
+        <i class="fa-solid fa-lock" style="margin-right:8px;"></i> Admin Login
+      </h2>
+      <div style="display:flex;flex-direction:column;gap:15px">
+        <input id="username" placeholder="Username" />
+        <input id="password" type="password" placeholder="Password" />
+        <button onclick="login()" class="btn-primary" style="justify-content:center;">
+          <i class="fa-solid fa-right-to-bracket"></i> Log In
+        </button>
+        <p id="errorMsg" style="color:#ef4444;height:18px;font-size:0.9rem;text-align:center;"></p>
+      </div>
+    </section>
+  </main>
+
+  <script src="login.js"></script>
+</body>
+</html>

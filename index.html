@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Admin Transaction Panel</title>
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="logo-text"><i class="fa-solid fa-gem"></i> Shy Shai</span>
+      <button class="collapse-btn" onclick="toggleSidebar()" aria-label="Toggle sidebar">
+        <i class="fa fa-bars"></i>
+      </button>
+    </div>
+
+    <div class="nav-wrapper"> 
+        <nav>
+          <ul class="nav" role="menu">
+            <li class="nav-item active" data-page="dashboard" onclick="showPage('dashboard')" role="menuitem">
+              <i class="fa fa-chart-line"></i><span>Dashboard</span>
+            </li>
+            <li class="nav-item" data-page="add" onclick="showPage('add')" role="menuitem">
+              <i class="fa fa-circle-plus"></i><span>Add Transaction</span>
+            </li>
+            
+            <li class="nav-item has-submenu" data-page="roblox" onclick="showPage('roblox')" role="menuitem">
+              <i class="fa fa-gamepad"></i><span>Roblox List</span>
+            </li>
+            <div id="roblox-filters" class="submenu">
+                <button class="btn-filter" data-filter="ALL" onclick="setFilter('roblox', 'ALL')">ALL</button>
+                <button class="btn-filter" data-filter="UNPENDING" onclick="setFilter('roblox', 'UNPENDING')">UNPENDING</button>
+                <button class="btn-filter" data-filter="PROCESSING" onclick="setFilter('roblox', 'PROCESSING')">PROCESSING</button>
+                <button class="btn-filter" data-filter="DELAYED" onclick="setFilter('roblox', 'DELAYED')">DELAYED</button>
+                <button class="btn-filter" data-filter="CANCELLED" onclick="setFilter('roblox', 'CANCELLED')">CANCELLED</button>
+                <button class="btn-filter" data-filter="DONE" onclick="setFilter('roblox', 'DONE')">DONE</button>
+            </div>
+            
+            <li class="nav-item has-submenu" data-page="ml" onclick="showPage('ml')" role="menuitem">
+              <i class="fa fa-fire"></i><span>ML List</span>
+            </li>
+            <div id="ml-filters" class="submenu">
+                <button class="btn-filter" data-filter="ALL" onclick="setFilter('ml', 'ALL')">ALL</button>
+                <button class="btn-filter" data-filter="UNPENDING" onclick="setFilter('ml', 'UNPENDING')">UNPENDING</button>
+                <button class="btn-filter" data-filter="PROCESSING" onclick="setFilter('ml', 'PROCESSING')">PROCESSING</button>
+                <button class="btn-filter" data-filter="DELAYED" onclick="setFilter('ml', 'DELAYED')">DELAYED</button>
+                <button class="btn-filter" data-filter="CANCELLED" onclick="setFilter('ml', 'CANCELLED')">CANCELLED</button>
+                <button class="btn-filter" data-filter="DONE" onclick="setFilter('ml', 'DONE')">DONE</button>
+            </div>
+          </ul>
+        </nav>
+    </div> 
+    
+    <div class="sidebar-footer-actions">
+      <button id="darkModeToggle" class="btn-ghost" onclick="toggleDarkMode()" aria-label="Toggle dark mode">
+        <i class="fa fa-moon"></i> <span>Toggle Dark Mode</span>
+      </button>
+      <button class="btn-danger" onclick="logout()" aria-label="Logout">
+        <i class="fa fa-right-from-bracket"></i> <span>Sign Out</span>
+      </button>
+    </div>
+    </aside>
+
+  <div class="main" id="main">
+
+    <header class="topbar">
+      <div class="top-left">
+        <button class="menu-toggle-btn topbar-btn" onclick="toggleSidebar()" aria-label="Toggle menu">
+          <i class="fa fa-bars"></i>
+        </button>
+        <h3 id="page-title">Dashboard</h3>
+      </div>
+
+      <div class="top-right">
+        <button id="mobileDarkModeToggle" class="topbar-btn" onclick="toggleDarkMode()" aria-label="Toggle dark mode">
+          <i class="fa fa-moon"></i>
+        </button>
+        <div class="profile" title="Admin">
+          <img src="profile.jpg" alt="profile avatar">
+          <span class="profile-name">Admin</span>
+        </div>
+      </div>
+    </header>
+
+    <main id="dashboard" class="page active" aria-live="polite">
+      <section>
+        <h2>Overview</h2>
+        <p class="muted">Welcome to your professional admin panel. Here's a quick summary.</p>
+
+        <div class="cards">
+          <div class="card">
+            <i class="fa fa-boxes"></i>
+            <h4>Total Transactions</h4>
+            <p id="stat-total">0</p>
+          </div>
+          <div class="card">
+            <i class="fa fa-clock"></i>
+            <h4>Unpending</h4>
+            <p id="stat-unpending">0</p>
+          </div>
+          <div class="card">
+            <i class="fa fa-truck-fast"></i>
+            <h4>Processing</h4>
+            <p id="stat-processing">0</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <section id="add" class="page">
+      <h2>Add New Transaction</h2>
+
+      <div class="form-row">
+        <div style="flex:1">
+          <label for="gameType">Game</label>
+          <select id="gameType" aria-label="Game select">
+            <option value="">-- Select Game --</option>
+            <option value="Roblox">Roblox</option>
+            <option value="ML">Mobile Legends</option>
+          </select>
+        </div>
+        <div style="width:220px">
+          <label for="status">Initial Status</label>
+          <select id="status" aria-label="Status select"></select>
+        </div>
+      </div>
+
+      <div id="gameFields" class="hidden">
+
+        <div id="robloxForm" class="hidden form-grid">
+            <div>
+                <label for="rbFacebook">Facebook</label>
+                <input id="rbFacebook" placeholder="FB name / url">
+            </div>
+            <div>
+                <label for="rbUsername">Roblox Username</label>
+                <input id="rbUsername" placeholder="Roblox Username">
+            </div>
+            <div>
+                <label for="rbAmount">Robux Amount</label>
+                <input id="rbAmount" type="number" placeholder="e.g., 800">
+            </div>
+            <div>
+                <label for="rbPayment">Payment (CT/NCT)</label>
+                <select id="rbPayment">
+                <option value="CT">CT</option>
+                <option value="NCT">NCT</option>
+                </select>
+            </div>
+            <div>
+                <label for="rbSpeed">Processing Speed</label>
+                <select id="rbSpeed">
+                <option value="FAST">FAST</option>
+                <option value="SLOW">SLOW</option>
+                <option value="MINS">MINS</option>
+                </select>
+            </div>
+            <div>
+                <label for="rbPrice">Price (₱)</label>
+                <input id="rbPrice" type="number" placeholder="e.g., 500">
+            </div>
+        </div>
+
+        <div id="mlForm" class="hidden form-grid">
+          <div>
+            <label for="mlFacebook">Facebook</label>
+            <input id="mlFacebook" placeholder="FB name / url">
+          </div>
+          <div>
+            <label for="mlUsername">IGN</label>
+            <input id="mlUsername" placeholder="In-Game Name">
+          </div>
+          <div>
+            <label for="mlID">ML ID</label>
+            <input id="mlID" placeholder="ID No.">
+          </div>
+          <div>
+            <label for="mlServer">Server</label>
+            <input id="mlServer" placeholder="Server No.">
+          </div>
+          <div>
+            <label for="mlType">Type</label>
+            <select id="mlType">
+              <option>Skin</option><option>Starlight</option><option>Emotes</option><option>Others</option>
+            </select>
+          </div>
+          <div>
+            <label for="mlPayment">Payment Status</label>
+            <select id="mlPayment">
+              <option>PAID</option><option>HALF</option><option>NOT PAID</option>
+            </select>
+          </div>
+          <div>
+            <label for="mlPrice">Price (₱)</label>
+            <input id="mlPrice" type="number" placeholder="Price">
+          </div>
+        </div>
+
+      </div>
+
+      <div style="margin-top:12px">
+        <button id="addBtn" class="btn-primary"><i class="fa-solid fa-plus"></i> Add Transaction</button>
+      </div>
+    </section>
+
+    <section id="roblox" class="page">
+      <h2>Roblox Transactions</h2>
+      <div id="robloxTableContainer" class="table-container">
+        <table class="data-table" aria-describedby="robloxTable">
+          <thead>
+              <tr>
+                  <th>Date</th>
+                  <th>Facebook</th>
+                  <th>Username</th>
+                  <th>Robux</th>
+                  <th>Type</th>
+                  <th>Speed</th>
+                  <th>Price</th>
+                  <th>Status</th>
+                  <th>Time Passed</th>
+                  <th>Action</th>
+              </tr>
+          </thead>
+
+          <tbody id="robloxTable"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="ml" class="page">
+      <h2>ML Transactions</h2>
+      <div id="mlTableContainer" class="table-container">
+        <table class="data-table" aria-describedby="mlTable">
+          <thead>
+              <tr>
+                  <th>Order Date</th>
+                  <th>Facebook</th>
+                  <th>IGN</th>
+                  <th>ID</th>
+                  <th>Server</th>
+                  <th>Type</th>
+                  <th>Payment</th>
+                  <th>Price</th>
+                  <th>Status</th>
+                  <th>Days</th>
+                  <th>Action</th>
+              </tr>
+          </thead>
+          <tbody id="mlTable"></tbody>
+        </table>
+      </div>
+    </section>
+
+  </div><div id="modal" class="modal">
+        <div class="modal-content">
+            <h3>Edit Transaction</h3>
+
+            <div class="form-grid" id="editFields"></div>
+
+            <label for="editStatus">Status</label>
+            <select id="editStatus">
+                <option>UNPENDING</option>
+                <option>PROCESSING</option>
+                <option>DONE</option>
+                <option>DELAYED</option>
+                <option>CANCELLED</option>
+            </select>
+
+            <div class="modal-actions">
+                <button id="saveEditBtn" class="btn-primary">Save Changes</button>
+                <button id="deleteBtn" class="btn-danger">Delete</button>
+                <button id="cancelBtn" class="btn-ghost">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+
+  <div id="toast" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
